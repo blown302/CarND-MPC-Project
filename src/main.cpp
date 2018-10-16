@@ -135,6 +135,8 @@ int main(int argc, char *argv[]) {
           double py = j[1]["y"];
           double psi = j[1]["psi"];
           double v = j[1]["speed"];
+          double steering_angle = j[1]["steering_angle"];
+          double throttle = j[1]["throttle"];
 
           // shift waypoints into vehicle coordinate system.
           // TODO: extract method. 
@@ -152,11 +154,9 @@ int main(int argc, char *argv[]) {
 
           // Contruct Eigen vectors from std::vector.
           double* ptsx_ptr = &ptsx[0];
-//          Map<VectorXd> ptsx_transform(ptsx_ptr, ptsx.size());
           Map<VectorXd> ptsx_transform(ptsx_ptr, ptsx.size());
 
           double* ptsy_ptr = &ptsy[0];
-//          Map<VectorXd> ptsy_transform(ptsy_ptr, ptsy.size());
           Map<VectorXd> ptsy_transform(ptsy_ptr, ptsy.size());
 
           // fit polynomial to waypoints.
@@ -175,7 +175,7 @@ int main(int argc, char *argv[]) {
           state << 0, 0, 0, v, cte, epsi;
 
           // predict
-          auto vars = mpc.Solve(state, coeffs);
+          auto vars = mpc.Solve(state, coeffs, throttle, steering_angle);
           // TODO: remove print
 //          for (auto &var :vars) {
 //              cout << "solver var: " << var << endl;

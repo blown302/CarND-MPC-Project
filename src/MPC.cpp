@@ -150,16 +150,25 @@ class FG_eval {
 MPC::MPC() {}
 MPC::~MPC() {}
 
-vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs) {
+vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs, double throttle, double steering_angle) {
   bool ok = true;
   typedef CPPAD_TESTVECTOR(double) Dvector;
 
-  double x = state[0];
-  double y = state[1];
-  double psi = state[2];
-  double v = state[3];
-  double cte = state[4];
-  double epsi = state[5];
+  auto x0 = state[0];
+  auto y0 = state[1];
+  auto psi0 = state[2];
+  auto v0 = state[3];
+  auto cte0 = state[4];
+  auto epsi0 = state[5];
+
+  auto x = x0 + v0 * cos(psi0) * dt;
+  auto y = y0 + v0 * sin(psi0) * dt;
+  auto psi = psi0 + v0 / Lf * steering_angle * dt;
+  auto v = v0 + throttle * dt;
+
+  auto cte = y - cte0;
+  // TODO: may simply use state[5]
+  auto epsi = epsi0;
 
   // TODO: Set the number of model variables (includes both states and inputs).
   // For example: If the state is a 4 element vector, the actuators is a 2
