@@ -141,15 +141,12 @@ int main(int argc, char *argv[]) {
           // shift waypoints into vehicle coordinate system.
           // TODO: extract method. 
           for (auto i = 0; i < ptsx.size(); i++) {
-            auto distance = sqrt(pow(ptsx[i]-px,2) + pow(ptsy[i]-py,2));
-            auto direction_abs = atan2(ptsy[i]-py,ptsx[i]-px);
-            auto direction_rel = direction_abs - psi;
+            auto shift_x = ptsx[i] - px;
+            auto shift_y = ptsy[i] - py;
 
-            auto x = distance * cos(direction_rel);
-            auto y = distance * sin(direction_rel);
 
-            ptsx[i] = x;
-            ptsy[i] = y;
+            ptsx[i] = shift_x * cos(-psi) - shift_y * sin(-psi);
+            ptsy[i] = shift_x * sin(-psi) + shift_y * cos(-psi);
           }
 
           // Contruct Eigen vectors from std::vector.
@@ -181,7 +178,8 @@ int main(int argc, char *argv[]) {
 //              cout << "solver var: " << var << endl;
 //          }
 
-          double steer_value = vars[0]/(deg2rad(25)/Lf);
+          double steer_value = vars[0]/deg2rad(25);
+//          double steer_value = vars[0];
 //          double throttle_value = 10;
           double throttle_value = vars[1];
 
@@ -209,7 +207,7 @@ int main(int argc, char *argv[]) {
           json msgJson;
           // NOTE: Remember to divide by deg2rad(25) before you send the steering value back.
           // Otherwise the values will be in between [-deg2rad(25), deg2rad(25] instead of [-1, 1].
-          msgJson["steering_angle"] = steer_value;
+          msgJson["steering_angle"] = -steer_value;
           msgJson["throttle"] = throttle_value;
 
           //Display the MPC predicted trajectory
@@ -238,7 +236,7 @@ int main(int argc, char *argv[]) {
 
 
           auto msg = "42[\"steer\"," + msgJson.dump() + "]";
-          // std::cout << msg << std::endl;
+//           std::cout << msg << std::endl;
           // Latency
           // The purpose is to mimic real driving conditions where
           // the car does actuate the commands instantly.
