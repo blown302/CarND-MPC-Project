@@ -35,14 +35,14 @@ auto prev_time = getCurrentTime();
 // This is the length from front to CoG that has a similar radius.
 const double Lf = 2.67;
 
-double target_v = 50;
+double target_v = 105;
 double calc_v = target_v;
-double steering_actuator_weight = 1;
+double steering_actuator_weight = 4000.;
 double accelerator_actuator_weight = 1;
-double error_weight = 300.;
-double psi_error_weight = 300.;
-double steering_smoothing_weight = 2;
-double accelerator_smoothing_weight = 1;
+double error_weight = 1.;
+double psi_error_weight = 1.;
+double steering_smoothing_weight = 1000.;
+double accelerator_smoothing_weight = 1.;
 
 const size_t x_start = 0;
 const size_t y_start = x_start + N;
@@ -285,15 +285,16 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs, double 
   constraints_upperbound[epsi_start] = epsi;
 
 
-  // calculate target velocity based on cte:
-  const double max_cte = 10.;
-  if (cte > max_cte) calc_v = 15.;
-
+  // calculate target velocity based on cte
+  const double max_cte = 7;
   auto eff_cte = abs(cte);
-  calc_v = ((max_cte - eff_cte)/max_cte) * target_v;
+
+  if (eff_cte > max_cte) calc_v *= .9;
+  else {
+      calc_v = (1 - eff_cte/max_cte) * target_v;
+  }
 
   cout << "calc'd target velocity: " << calc_v << "with eff_cte " << eff_cte << endl;
-
 
   // object that computes objective and constraints
   FG_eval fg_eval(coeffs);
