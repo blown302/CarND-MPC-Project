@@ -137,7 +137,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs, double 
     cte = y - cte;
     epsi = psi - epsi;
 
-    cout << "current cte: " << cte << endl;
+    // cout << "current cte: " << cte << endl;
 
     size_t n_vars = N * 6 + (N - 1) * 2;
     size_t n_constraints = 6 * N;
@@ -188,7 +188,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs, double 
     }
 
     updateLatency();
-    cout << "latency in seconds: " << latency_in_seconds_ << endl;
+    // cout << "latency in seconds: " << latency_in_seconds_ << endl;
 
     // Set upper and lower bound contraints from state
     constraints_lowerbound[x_start] = x;
@@ -208,7 +208,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs, double 
     // calculate target velocity based on cte
     velocity_.updateVelocityBasedOnError(cte);
 
-    cout << "calc'd target velocity: " << velocity_.getVariableVelocity() << " with cte " << cte << endl;
+    // cout << "calc'd target velocity: " << velocity_.getVariableVelocity() << " with cte " << cte << endl;
 
     // object that computes objective and constraints
     FG_eval fg_eval{coeffs, weights_, velocity_};
@@ -245,7 +245,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs, double 
     // Cost
     double cost = solution.obj_value;
 
-    std::cout << "Cost " << cost << std::endl;
+    // std::cout << "Cost " << cost << std::endl;
 
     auto steering = solution.x[delta_start];
     auto acceleration = solution.x[a_start];
