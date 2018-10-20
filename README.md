@@ -30,7 +30,14 @@ The following videos are provided to show the behavior of the different configur
 
 ### Parameters Tuning
 
-The default parameters are  
+The default parameters are tuned for high speeds. Positional parameters have been added to allow
+for quick tuning for testing at different speeds. 
+
+1. Steering actuator minimizer
+2. Accelerator actuator minimizer
+3. Steering smoothing
+4. Acceleration smoothing
+5. Target velocity 
 
 # Reflection
 
