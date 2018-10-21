@@ -134,7 +134,6 @@ int main(int argc, char *argv[]) {
                     double throttle = j[1]["throttle"];
 
                     // shift waypoints into vehicle coordinate system.
-                    // TODO: extract method.
                     for (auto i = 0; i < ptsx.size(); i++) {
                         auto shift_x = ptsx[i] - px;
                         auto shift_y = ptsy[i] - py;
