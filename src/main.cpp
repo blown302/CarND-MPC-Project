@@ -74,7 +74,7 @@ Eigen::VectorXd polyfit(Eigen::VectorXd xvals, Eigen::VectorXd yvals,
 int main(int argc, char *argv[]) {
     uWS::Hub h;
     // delcare and initialize mpc parameters
-    double target_velocity = 105.,
+    double target_velocity = 110.,
         steering_actuator_weight = 7000.,
         accelerator_actuator_weight = 1.,
         steering_smoothing_weight = 1000.,
