@@ -243,7 +243,7 @@ vector<double> MPC::Solve(Eigen::VectorXd state, Eigen::VectorXd coeffs, double 
     ok &= solution.status == CppAD::ipopt::solve_result<Dvector>::success;
 
     // Cost
-    double cost = solution.obj_value;
+    // double cost = solution.obj_value;
 
     // std::cout << "Cost " << cost << std::endl;
 
